@@ -28,10 +28,10 @@ $ npm install --save-dev simple-vue-app
 ## 📖 Usage
 
 ```
-Usage: build <source_dir> --output <output_dir> [OPTIONS]
-       build <source_dir> -o <output_dir> [OPTIONS]
-       build --help
-       build --version
+Usage: simple-vue-app <source_dir> --output <output_dir> [OPTIONS]
+       simple-vue-app <source_dir> -o <output_dir> [OPTIONS]
+       simple-vue-app --help
+       simple-vue-app --version
 
     Build a single page application powered by Vue.js.
 
