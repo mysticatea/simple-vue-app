@@ -1,0 +1,12 @@
+{
+    "private": true,
+    "name": "simple-vue-app-test",
+    "version": "0.0.0",
+    "files": [],
+    "dependencies": {
+        "simple-vue-app": "../"
+    },
+    "scripts": {
+        "simple-vue-app": "simple-vue-app"
+    }
+}
