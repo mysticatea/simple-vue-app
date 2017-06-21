@@ -2,7 +2,6 @@
 
 [![npm version](https://img.shields.io/npm/v/simple-vue-app.svg)](https://www.npmjs.com/package/simple-vue-app)
 [![Downloads/month](https://img.shields.io/npm/dm/simple-vue-app.svg)](http://www.npmtrends.com/simple-vue-app)
-[![Build Status](https://travis-ci.org/mysticatea/simple-vue-app.svg?branch=master)](https://travis-ci.org/mysticatea/simple-vue-app)
 [![Dependency Status](https://david-dm.org/mysticatea/simple-vue-app.svg)](https://david-dm.org/mysticatea/simple-vue-app)
 
 This provides a CLI command to build a single page application (SPA) with [Vue.js].
