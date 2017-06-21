@@ -6,18 +6,18 @@ See LICENSE file in root directory for full license.
 <template>
     <div>
         <i class="material-icons">favorite</i>
-        Hello, {{name}}!
+        Hello, {{name}}!<br>
     </div>
 </template>
 
-<style scoped>
+<style>
 @import "material-design-icons/iconfont/material-icons.css";
 
 .small {
-    background: url(small.png);
+    background: url(small-in-css.png);
 }
 .big {
-    background: url(big.gif);
+    background: url(big-in-css.gif);
 }
 .material-icons {
     color: pink;
@@ -25,12 +25,11 @@ See LICENSE file in root directory for full license.
 </style>
 
 <script>
-"use strict"
-
-module.exports = {
-    name: "hello",
+export default {
+    name: "asset-in-css",
     data() {
         return {name: "World!"}
     },
 }
+
 </script>

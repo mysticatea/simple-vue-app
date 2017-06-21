@@ -9,7 +9,7 @@ This provides a CLI command to build a single page application (SPA) with [Vue.j
 
     $ simple-vue-app src -o dist
 
-This command transpiles from `src/index.html` and `src/index.js` to `dist/index.html`, `dist/index.js`, `dist/index.ie.js` and `dist/index.css`.
+This command transpiles from `src/index.html` and `src/index.js` to `dist/index.html`, `dist/index.js` and `dist/index.css`.
 
     $ simple-vue-app src -o dist -w
 
@@ -23,46 +23,93 @@ Use [npm].
 $ npm install --save-dev simple-vue-app
 ```
 
-- It requires [Node.js] v4 or later.
+- It requires [Node.js] v8 or later.
 
 ## 📖 Usage
 
 ```
-Usage: simple-vue-app <source_dir> --output <output_dir> [OPTIONS]
-       simple-vue-app <source_dir> -o <output_dir> [OPTIONS]
-       simple-vue-app --help
-       simple-vue-app --version
+This is a tool to build a single page application powered by Vue.js.
+This tool has some commands.
 
-    Build a single page application powered by Vue.js.
+$ simple-vue-app [OPTIONS]
+
+    The main command, this builds your cool application.
+
+    OPTIONS:
+        [SOURCE_DIR] ............... The source directory. Default is "src".
+        --output, -o <OUTPUT_DIR> .. The output directory. Default is "out".
+        --ie ....................... The flag to do additional processes for IE.
+        --watch, -w ................ The flag to observe files and rebuild on 
+                                     every file change.
+        --include-compiler ......... The flag to use compilers of Vue.js.
 
     Prepare the following files:
 
-    - '<source_dir>/index.html' is the main page.
-    - '<source_dir>/index.js' is the entry file.
+    - '[SOURCE_DIR]/index.js'
 
-    Then this generates the following files:
+    Then this will create the following files into <OUTPUT_DIR>:
 
-    - '<output_dir>/index.html' is the main page.
-    - '<output_dir>/index.css' is the main stylesheet.
-    - '<output_dir>/index.js' is the main script.
-    - '<output_dir>/index.ie.js' is the main script for IE11.
+    - 'index.html' is the main page.
+    - 'index.css' is the main stylesheet.
+    - 'index.js' is the main script.
+    - 'index.js.map' is the source map of the main script.
+    - And detected assets.
 
-    Enjoy for development!
+    That's almost all, enjoy for development!
 
-OPTIONS:
-    --no-ie ....... The flag to not generate '<output_dir>/index.ie.js'.
-    --watch, -w ... The flag to observe files and rebuild on every file change.
+$ simple-vue-app --test [OPTIONS]
+
+    This runs the tests of your cool application with Karma + Mocha.
+
+    OPTIONS:
+        [SOURCE_DIR] ............... The source directory. Default is "test".
+        --output, -o <OUTPUT_DIR> .. The output directory. Default is 
+                                     ".test_workspace".
+        --ie ....................... The flag to do additional processes for IE.
+        --watch, -w ................ The flag to observe files and rebuild on 
+                                     every file change.
+        --include-compiler ......... The flag to use compilers of Vue.js.
+
+    This builds '[SOURCE_DIR]/*.js' files then runs them by Karma + Mocha.
+
+$ simple-vue-app --help
+
+    Print this help text.
+
+$ simple-vue-app --version
+
+    Print this version number.
 ```
 
 ### Details
 
-This command uses [browserify] with:
+This command uses [rollup.js] with:
 
-- [babelify] plugin to transpile JavaScript files with [transform-async-to-generator], [transform-vue-jsx], [transform-inline-environment-variables], and [babili].
-- [vueify] plugin to transpile [Vue.js] single file components to JavaScript and CSS.
-    - It transpile the JavaScript code with [babel] with above plugins/presets.
-    - It transpile the CSS code with [PostCSS] with [autoprefixer], [postcss-import], [copy-assets], and [cssnano].
-- Additionally, it generates a file for IE11 with [es2015] and [babel-polyfill].
+- [rollup-plugin-json]
+- [rollup-plugin-url](./lib/build/rollup-plugin-url.js)
+- [rollup-plugin-vue]
+- [rollup-plugin-babel] with:
+    - [babel-preset-env]
+        - last 2 Chrome versions
+        - last 2 Firefox versions
+        - last 1 Edge versions
+        - last 1 Safari versions
+        - last 1 IE versions (only when you gave `--ie` option)
+    - [babel-plugin-transform-vue-jsx]
+    - [babel-plugin-transform-inline-environment-variables]
+    - [babel-plugin-minify-constant-folding]
+    - [babel-plugin-minify-dead-code-elimination]
+    - [babel-polyfill]
+- [rollup-plugin-commonjs]
+- [rollup-plugin-resolve] with extensions `.js`, `.json`, and `.vue`
+
+And use [PostCSS] for CSS of `.vue` files:
+
+- [autoprefixer]
+- [postcss-calc]
+- [postcss-custom-properties]
+- [postcss-import]
+- [postcss-url](./lib/build/postcss-url.js)
 
 If `--watch` option is given, `NODE_ENV` environment variable becomes `development`. Otherwise it becomes `production`.  
 If `--watch` option is given, the generated files have source maps.
@@ -77,20 +124,25 @@ Welcome ❤
 Please use GitHub's Issues/PRs.
 
 [babel]: https://babeljs.io/
+[babel-preset-env]: https://github.com/babel/babel-preset-env
+[babel-plugin-transform-vue-jsx]: https://www.npmjs.com/package/babel-plugin-transform-vue-jsx
+[babel-plugin-transform-inline-environment-variables]: https://www.npmjs.com/package/babel-plugin-transform-inline-environment-variables
+[babel-plugin-minify-constant-folding]: https://www.npmjs.com/package/babel-plugin-minify-constant-folding
+[babel-plugin-minify-dead-code-elimination]: https://www.npmjs.com/package/babel-plugin-minify-dead-code-elimination
 [babel-polyfill]: https://babeljs.io/docs/usage/polyfill/
-[babelify]: https://www.npmjs.com/package/babelify
 [babili]: https://www.npmjs.com/package/babel-preset-babili
-[browserify]: http://browserify.org/
-[copy-assets]: ./lib/postcss-copy-assets.js
 [cssnano]: http://cssnano.co/
-[es2015]: https://babeljs.io/docs/plugins/preset-es2015/
+[rollup.js]: https://rollupjs.org/
+[rollup-plugin-json]: https://www.npmjs.com/package/rollup-plugin-json
+[rollup-plugin-vue]: https://www.npmjs.com/package/rollup-plugin-vue
+[rollup-plugin-babel]: https://www.npmjs.com/package/rollup-plugin-babel
+[rollup-plugin-commonjs]: https://www.npmjs.com/package/rollup-plugin-commonjs
+[rollup-plugin-resolve]: https://www.npmjs.com/package/rollup-plugin-resolve
 [Node.js]: https://nodejs.org/
 [npm]: https://www.npmjs.com/
-[transform-async-to-generator]: https://www.npmjs.com/package/babel-plugin-transform-async-to-generator
-[transform-inline-environment-variables]: https://www.npmjs.com/package/babel-plugin-transform-inline-environment-variables
-[transform-vue-jsx]: https://www.npmjs.com/package/babel-plugin-transform-vue-jsx
 [Vue.js]: https://vuejs.org/
-[vueify]: https://www.npmjs.com/package/vueify
 [PostCSS]: http://postcss.org/
 [autoprefixer]: https://www.npmjs.com/package/autoprefixer
+[postcss-calc]: https://www.npmjs.com/package/postcss-calc
+[postcss-custom-properties]: https://www.npmjs.com/package/postcss-custom-properties
 [postcss-import]: https://www.npmjs.com/package/postcss-import
